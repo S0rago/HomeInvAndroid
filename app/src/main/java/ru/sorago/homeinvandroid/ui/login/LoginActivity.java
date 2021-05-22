@@ -20,10 +20,12 @@ import retrofit2.Response;
 import ru.sorago.homeinvandroid.MainActivity;
 import ru.sorago.homeinvandroid.R;
 import ru.sorago.homeinvandroid.api.ApiClient;
+import ru.sorago.homeinvandroid.api.SessionManager;
 import ru.sorago.homeinvandroid.core.MimeEncoder;
 import ru.sorago.homeinvandroid.data.model.User;
 import ru.sorago.homeinvandroid.data.request.LoginRequest;
-import ru.sorago.homeinvandroid.data.response.LoginResponse;
+import ru.sorago.homeinvandroid.data.response.base.RecordResponse;
+import ru.sorago.homeinvandroid.data.response.type.LoginData;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -80,9 +82,9 @@ public class LoginActivity extends AppCompatActivity {
             String password = passwordEditText.getText().toString();
             LoginRequest loginRequest = new LoginRequest(username, MimeEncoder.encode(password));
             ApiClient.getApiService().login(loginRequest)
-                    .enqueue(new Callback<LoginResponse>() {
+                    .enqueue(new Callback<RecordResponse<LoginData>>() {
                         @Override
-                        public void onFailure(Call<LoginResponse> call, Throwable t) {
+                        public void onFailure(Call<RecordResponse<LoginData>> call, Throwable t) {
                             // Error logging in
                             t.printStackTrace();
                             Toast.makeText(getApplicationContext(), "Nope, server ded", Toast.LENGTH_SHORT).show();
@@ -90,16 +92,15 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                        public void onResponse(Call<RecordResponse<LoginData>> call, Response<RecordResponse<LoginData>> response) {
                             try {
-                                LoginResponse loginResponse = response.body();
-                                if (loginResponse != null) {
-                                    User user = loginResponse.getLoggingUser();
-                                    if (user != null) {
-                                        updateUiWithUser(user);
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-                                    }
+                                RecordResponse<LoginData> loginResponse = response.body();
+                                if (loginResponse != null && loginResponse.getData() != null) {
+                                    User user = new User();
+                                    user.setEmail(loginResponse.getData().getEmail());
+                                    user.setName(loginResponse.getData().getName());
+                                    SessionManager.saveAuthToken(getApplicationContext(), loginResponse.getData().getToken());
+                                    updateUiWithUser(user);
                                 }
                             } catch (Exception e) {
                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -114,7 +115,9 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUiWithUser(User user) {
         String welcome = getString(R.string.welcome) + user.getName();
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        LoginActivity.this.startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 }

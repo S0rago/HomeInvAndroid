@@ -1,10 +1,11 @@
 package ru.sorago.homeinvandroid.data.response.type;
 
-public class LoggingUser {
+public class LoginData {
     private String name;
     private String email;
+    private String token;
 
-    public LoggingUser() {
+    public LoginData() {
     }
 
     public String getName() {
@@ -21,5 +22,13 @@ public class LoggingUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

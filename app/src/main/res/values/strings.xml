@@ -6,7 +6,7 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_register">Register</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">"Welcome, "</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
@@ -21,4 +21,16 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="description">Description</string>
+    <string name="name">Name</string>
+    <string name="menu_add_item">New item</string>
+    <string name="prop_name_hint">Enter name</string>
+    <string name="prop_val_hint">Enter value</string>
+    <string name="save_btn">Save</string>
+    <string name="prop_name">name</string>
+    <string name="prop_time">type</string>
+    <string name="type">Type</string>
+    <string name="server_lbl_text">Enter server link</string>
+    <string name="prompt_link">https://…</string>
+    <string name="link_btn_text">Connect</string>
 </resources>
